@@ -1,0 +1,134 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "provenance": [],
+      "authorship_tag": "ABX9TyPdXXl/YmBIKj01P6ohkJsM",
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    },
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/sreepavithra04/MLA0205/blob/main/Practical%20Problems/EXP%202\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 2,
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "ZHfRyXqMcLV4",
+        "outputId": "f78fd4d6-36e8-48e1-a266-dad4f109a2e9"
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "'trainingdata.csv' not found. Creating a default sample training dataset...\n",
+            "\n",
+            "Specific Boundary (S):\n",
+            "['Sunny', 'Warm', '?', 'Strong', '?', '?']\n",
+            "\n",
+            "General Boundary (G):\n",
+            "['Sunny', '?', '?', '?', '?', '?']\n",
+            "['?', 'Warm', '?', '?', '?', '?']\n"
+          ]
+        }
+      ],
+      "source": [
+        "import csv\n",
+        "import os\n",
+        "\n",
+        "data = []\n",
+        "\n",
+        "# Check if the file exists; if not, we can write a sample dataset\n",
+        "if not os.path.exists(\"trainingdata.csv\"):\n",
+        "    print(\"'trainingdata.csv' not found. Creating a default sample training dataset...\\n\")\n",
+        "    sample_data = [\n",
+        "        [\"Sky\", \"AirTemp\", \"Humidity\", \"Wind\", \"Water\", \"Forecast\", \"EnjoySport\"],\n",
+        "        [\"Sunny\", \"Warm\", \"Normal\", \"Strong\", \"Warm\", \"Same\", \"Yes\"],\n",
+        "        [\"Sunny\", \"Warm\", \"High\", \"Strong\", \"Warm\", \"Same\", \"Yes\"],\n",
+        "        [\"Rainy\", \"Cold\", \"High\", \"Strong\", \"Warm\", \"Change\", \"No\"],\n",
+        "        [\"Sunny\", \"Warm\", \"High\", \"Strong\", \"Cool\", \"Change\", \"Yes\"]\n",
+        "    ]\n",
+        "    with open(\"trainingdata.csv\", \"w\", newline=\"\") as file:\n",
+        "        writer = csv.writer(file)\n",
+        "        writer.writerows(sample_data)\n",
+        "\n",
+        "with open(\"trainingdata.csv\", \"r\") as file:\n",
+        "    reader = csv.reader(file)\n",
+        "    next(reader)\n",
+        "    for row in reader:\n",
+        "        data.append(row)\n",
+        "\n",
+        "n = len(data[0]) - 1\n",
+        "\n",
+        "S = ['0'] * n\n",
+        "G = [['?'] * n]\n",
+        "\n",
+        "for row in data:\n",
+        "    x = row[:-1]\n",
+        "    label = row[-1].lower()\n",
+        "\n",
+        "    if label == \"yes\":\n",
+        "        # Remove general hypotheses inconsistent with positive example\n",
+        "        G = [g for g in G if all(g[i] == '?' or g[i] == x[i]\n",
+        "                                  for i in range(n))]\n",
+        "\n",
+        "        # Generalize S\n",
+        "        for i in range(n):\n",
+        "            if S[i] == '0':\n",
+        "                S[i] = x[i]\n",
+        "            elif S[i] != x[i]:\n",
+        "                S[i] = '?'\n",
+        "\n",
+        "        # Remove hypotheses in G that are more specific than S\n",
+        "        G = [g for g in G if all(g[i] == '?' or S[i] == '?' or\n",
+        "                                  g[i] == S[i] for i in range(n))]\n",
+        "\n",
+        "    else:\n",
+        "        # Specific to general elimination on negative example\n",
+        "        new_G = []\n",
+        "        for g in G:\n",
+        "            if all(g[i] == '?' or g[i] == x[i] for i in range(n)):\n",
+        "                # g is consistent with negative example, so we must specialize it\n",
+        "                for i in range(n):\n",
+        "                    if g[i] == '?':\n",
+        "                        for val in [S[i]]:\n",
+        "                            if val != '0' and val != '?' and val != x[i]:\n",
+        "                                g_spec = list(g)\n",
+        "                                g_spec[i] = val\n",
+        "                                if g_spec not in new_G:\n",
+        "                                    new_G.append(g_spec)\n",
+        "            else:\n",
+        "                new_G.append(g)\n",
+        "        # Keep only hypotheses in G that are consistent with S\n",
+        "        G = [g for g in new_G if all(g[i] == '?' or S[i] == '?' or g[i] == S[i] for i in range(n))]\n",
+        "\n",
+        "print(\"Specific Boundary (S):\")\n",
+        "print(S)\n",
+        "\n",
+        "print(\"\\nGeneral Boundary (G):\")\n",
+        "for g in G:\n",
+        "    print(g)"
+      ]
+    }
+  ]
+}
