@@ -1,0 +1,91 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "provenance": [],
+      "authorship_tag": "ABX9TyOm7zM5dKLlE27uWmO7ilQF",
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    },
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/sreepavithra04/MLA0205/blob/main/Practical%20Problems/EXP%201\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 2,
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "rGRP4sdzZQ9-",
+        "outputId": "2579da1d-c4b2-4b87-8cb3-80e83fc012c7"
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "\"trainingdata.csv\" not found. Creating a sample dataset...\n",
+            "Most Specific Hypothesis:\n",
+            "['Sunny', 'Warm', '?', 'Strong', '?', '?']\n"
+          ]
+        }
+      ],
+      "source": [
+        "import csv\n",
+        "import os\n",
+        "\n",
+        "# Create a sample dummy file if it doesn't exist to prevent FileNotFoundError\n",
+        "if not os.path.exists(\"trainingdata.csv\"):\n",
+        "    print(\"\\\"trainingdata.csv\\\" not found. Creating a sample dataset...\")\n",
+        "    sample_data = [\n",
+        "        [\"Sky\", \"AirTemp\", \"Humidity\", \"Wind\", \"Water\", \"Forecast\", \"EnjoySport\"],\n",
+        "        [\"Sunny\", \"Warm\", \"Normal\", \"Strong\", \"Warm\", \"Same\", \"Yes\"],\n",
+        "        [\"Sunny\", \"Warm\", \"High\", \"Strong\", \"Warm\", \"Same\", \"Yes\"],\n",
+        "        [\"Rainy\", \"Cold\", \"High\", \"Strong\", \"Warm\", \"Change\", \"No\"],\n",
+        "        [\"Sunny\", \"Warm\", \"High\", \"Strong\", \"Cool\", \"Change\", \"Yes\"]\n",
+        "    ]\n",
+        "    with open(\"trainingdata.csv\", \"w\", newline=\"\") as file:\n",
+        "        writer = csv.writer(file)\n",
+        "        writer.writerows(sample_data)\n",
+        "\n",
+        "data = []\n",
+        "\n",
+        "with open(\"trainingdata.csv\", \"r\") as file:\n",
+        "    reader = csv.reader(file)\n",
+        "    next(reader)   # Skip header\n",
+        "    for row in reader:\n",
+        "        data.append(row)\n",
+        "\n",
+        "h = ['0'] * (len(data[0]) - 1)\n",
+        "\n",
+        "for row in data:\n",
+        "    if row[-1].lower() == \"yes\":\n",
+        "        for i in range(len(h)):\n",
+        "            if h[i] == '0':\n",
+        "                h[i] = row[i]\n",
+        "            elif h[i] != row[i]:\n",
+        "                h[i] = '?'\n",
+        "\n",
+        "print(\"Most Specific Hypothesis:\")\n",
+        "print(h)"
+      ]
+    }
+  ]
+}
