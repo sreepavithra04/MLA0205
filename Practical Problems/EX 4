@@ -1,0 +1,79 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "provenance": [],
+      "authorship_tag": "ABX9TyPj2nUJ8gzvpV3myWQNk4rl",
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    },
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/sreepavithra04/MLA0205/blob/main/Practical%20Problems/EX%204\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 1,
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "Bxk29Qc2lW20",
+        "outputId": "f0705a13-6436-4461-8ed4-3ccbb7a026ca"
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Actual: [0 1 1 0]\n",
+            "Predicted: [0 1 1 0]\n",
+            "Accuracy: 100.0 %\n"
+          ]
+        }
+      ],
+      "source": [
+        "import numpy as np\n",
+        "from sklearn.neural_network import MLPClassifier\n",
+        "from sklearn.metrics import accuracy_score\n",
+        "\n",
+        "# Dataset: XOR\n",
+        "X = np.array([[0, 0], [0, 1], [1, 0], [1, 1]])\n",
+        "y = np.array([0, 1, 1, 0])\n",
+        "\n",
+        "# Build ANN using backpropagation\n",
+        "model = MLPClassifier(\n",
+        "    hidden_layer_sizes=(4,),\n",
+        "    activation='tanh',\n",
+        "    solver='lbfgs',\n",
+        "    max_iter=5000,\n",
+        "    random_state=1\n",
+        ")\n",
+        "\n",
+        "model.fit(X, y)\n",
+        "\n",
+        "# Predictions\n",
+        "pred = model.predict(X)\n",
+        "\n",
+        "print(\"Actual:\", y)\n",
+        "print(\"Predicted:\", pred)\n",
+        "print(\"Accuracy:\", accuracy_score(y, pred) * 100, \"%\")"
+      ]
+    }
+  ]
+}
