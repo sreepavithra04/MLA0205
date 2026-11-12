@@ -1,0 +1,101 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "provenance": [],
+      "authorship_tag": "ABX9TyMsWxIpC7DNWPQPXpuqGRCV",
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    },
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/sreepavithra04/MLA0205/blob/main/Practical%20Problems/EXP%2011\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 1,
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "y_1Gaer_8R-v",
+        "outputId": "ce381a06-cab6-4d62-f303-3f5713caefa6"
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Predicted Credit Scores: ['Poor' 'Good']\n",
+            "Accuracy: 0.5\n",
+            "New Customer Credit Score: ['Good']\n"
+          ]
+        },
+        {
+          "output_type": "stream",
+          "name": "stderr",
+          "text": [
+            "/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but DecisionTreeClassifier was fitted with feature names\n",
+            "  warnings.warn(\n"
+          ]
+        }
+      ],
+      "source": [
+        "import pandas as pd\n",
+        "from sklearn.tree import DecisionTreeClassifier\n",
+        "from sklearn.model_selection import train_test_split\n",
+        "from sklearn.metrics import accuracy_score\n",
+        "\n",
+        "# Dataset\n",
+        "data = {\n",
+        "    'Income': [25000, 40000, 50000, 60000, 30000, 80000, 90000, 20000],\n",
+        "    'Age': [22, 30, 35, 40, 25, 45, 50, 21],\n",
+        "    'Loan': [10000, 15000, 20000, 25000, 12000, 30000, 35000, 8000],\n",
+        "    'Credit': ['Poor', 'Good', 'Good', 'Good',\n",
+        "               'Poor', 'Good', 'Good', 'Poor']\n",
+        "}\n",
+        "\n",
+        "df = pd.DataFrame(data)\n",
+        "\n",
+        "# Features and Target\n",
+        "X = df[['Income', 'Age', 'Loan']]\n",
+        "y = df['Credit']\n",
+        "\n",
+        "# Split Dataset\n",
+        "X_train, X_test, y_train, y_test = train_test_split(\n",
+        "    X, y, test_size=0.25, random_state=42\n",
+        ")\n",
+        "\n",
+        "# Model\n",
+        "model = DecisionTreeClassifier(random_state=42)\n",
+        "model.fit(X_train, y_train)\n",
+        "\n",
+        "# Prediction\n",
+        "y_pred = model.predict(X_test)\n",
+        "\n",
+        "print(\"Predicted Credit Scores:\", y_pred)\n",
+        "print(\"Accuracy:\", accuracy_score(y_test, y_pred))\n",
+        "\n",
+        "# New Customer\n",
+        "new_customer = [[55000, 32, 18000]]\n",
+        "print(\"New Customer Credit Score:\",\n",
+        "      model.predict(new_customer))"
+      ]
+    }
+  ]
+}
