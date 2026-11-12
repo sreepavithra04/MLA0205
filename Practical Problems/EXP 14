@@ -1,0 +1,103 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "provenance": [],
+      "authorship_tag": "ABX9TyNyX4Lbad6TbicElkCj4vCJ",
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    },
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/sreepavithra04/MLA0205/blob/main/Practical%20Problems/EXP%2014\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 1,
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "TMwuBN4c9v44",
+        "outputId": "79d701e3-3e4e-4bc9-cac9-1ffb9cef44ba"
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Actual Prices: [75, 85]\n",
+            "Predicted Prices: [69.50581395 78.6627907 ]\n",
+            "Mean Squared Error: 35.17315102758236\n",
+            "R2 Score: -0.4069260411032942\n",
+            "Predicted House Price: [66.45348837] Lakhs\n"
+          ]
+        },
+        {
+          "output_type": "stream",
+          "name": "stderr",
+          "text": [
+            "/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LinearRegression was fitted with feature names\n",
+            "  warnings.warn(\n"
+          ]
+        }
+      ],
+      "source": [
+        "import pandas as pd\n",
+        "from sklearn.linear_model import LinearRegression\n",
+        "from sklearn.model_selection import train_test_split\n",
+        "from sklearn.metrics import mean_squared_error, r2_score\n",
+        "\n",
+        "# Dataset\n",
+        "data = {\n",
+        "    'Area': [1000, 1500, 800, 1200, 2000,\n",
+        "             1800, 900, 1600],\n",
+        "    'Bedrooms': [2, 3, 2, 3, 4, 3, 2, 4],\n",
+        "    'Price': [50, 75, 40, 60, 90, 85, 45, 80]\n",
+        "}\n",
+        "\n",
+        "df = pd.DataFrame(data)\n",
+        "\n",
+        "# Features and Target\n",
+        "X = df[['Area', 'Bedrooms']]\n",
+        "y = df['Price']\n",
+        "\n",
+        "# Split Dataset\n",
+        "X_train, X_test, y_train, y_test = train_test_split(\n",
+        "    X, y, test_size=0.25, random_state=42\n",
+        ")\n",
+        "\n",
+        "# Train Model\n",
+        "model = LinearRegression()\n",
+        "model.fit(X_train, y_train)\n",
+        "\n",
+        "# Prediction\n",
+        "y_pred = model.predict(X_test)\n",
+        "\n",
+        "print(\"Actual Prices:\", list(y_test))\n",
+        "print(\"Predicted Prices:\", y_pred)\n",
+        "print(\"Mean Squared Error:\", mean_squared_error(y_test, y_pred))\n",
+        "print(\"R2 Score:\", r2_score(y_test, y_pred))\n",
+        "\n",
+        "# New House Prediction\n",
+        "new_house = [[1400, 3]]\n",
+        "print(\"Predicted House Price:\", model.predict(new_house), \"Lakhs\")"
+      ]
+    }
+  ]
+}
