@@ -1,0 +1,105 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "provenance": [],
+      "authorship_tag": "ABX9TyO5MpV1oZ+xVf0mqjFz+rfJ",
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    },
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/sreepavithra04/MLA0205/blob/main/Practical%20Problems/EXP%2013\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 1,
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "P9-8vpgk9cQX",
+        "outputId": "604fb1a7-2cdc-4355-946a-944c385194cc"
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Actual Prices: [450000, 650000]\n",
+            "Predicted Prices: [450000. 650000.]\n",
+            "MSE: 3.3881317890172014e-20\n",
+            "R2 Score: 1.0\n",
+            "Car Price: [800000.]\n"
+          ]
+        },
+        {
+          "output_type": "stream",
+          "name": "stderr",
+          "text": [
+            "/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LinearRegression was fitted with feature names\n",
+            "  warnings.warn(\n"
+          ]
+        }
+      ],
+      "source": [
+        "import pandas as pd\n",
+        "from sklearn.linear_model import LinearRegression\n",
+        "from sklearn.model_selection import train_test_split\n",
+        "from sklearn.metrics import mean_squared_error, r2_score\n",
+        "\n",
+        "# Dataset\n",
+        "data = {\n",
+        "    'Year': [2015, 2016, 2017, 2018, 2019,\n",
+        "             2020, 2021, 2022],\n",
+        "    'Kilometers': [50000, 45000, 40000, 35000,\n",
+        "                   30000, 25000, 20000, 15000],\n",
+        "    'Price': [400000, 450000, 500000, 550000,\n",
+        "              600000, 650000, 700000, 750000]\n",
+        "}\n",
+        "\n",
+        "df = pd.DataFrame(data)\n",
+        "\n",
+        "# Features and Target\n",
+        "X = df[['Year', 'Kilometers']]\n",
+        "y = df['Price']\n",
+        "\n",
+        "# Split Dataset\n",
+        "X_train, X_test, y_train, y_test = train_test_split(\n",
+        "    X, y, test_size=0.25, random_state=42\n",
+        ")\n",
+        "\n",
+        "# Model\n",
+        "model = LinearRegression()\n",
+        "model.fit(X_train, y_train)\n",
+        "\n",
+        "# Prediction\n",
+        "y_pred = model.predict(X_test)\n",
+        "\n",
+        "print(\"Actual Prices:\", list(y_test))\n",
+        "print(\"Predicted Prices:\", y_pred)\n",
+        "print(\"MSE:\", mean_squared_error(y_test, y_pred))\n",
+        "print(\"R2 Score:\", r2_score(y_test, y_pred))\n",
+        "\n",
+        "# Predict New Car Price\n",
+        "new_car = [[2023, 10000]]\n",
+        "print(\"Car Price:\", model.predict(new_car))"
+      ]
+    }
+  ]
+}
